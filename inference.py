@@ -53,16 +53,16 @@ def model_fn(model_dir):
     model_name = os.environ.get("MODEL_NAME", "resnet50")
     
     if model_name == "resnet50":
-        model = models.resnet50(pretrained=True)
+        model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
     elif model_name == "resnet18":
-        model = models.resnet18(pretrained=True)
+        model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
     elif model_name == "efficientnet_b0":
-        model = models.efficientnet_b0(pretrained=True)
+        model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
     elif model_name == "densenet121":
-        model = models.densenet121(pretrained=True)
+        model = models.densenet121(weights=models.DenseNet121_Weights.IMAGENET1K_V1)
     else:
         logger.warning(f"Unknown model name {model_name}, defaulting to ResNet50")
-        model = models.resnet50(pretrained=True)
+        model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
     
     model = model.to(device)
     model.eval()
