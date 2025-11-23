@@ -81,10 +81,12 @@ def model_fn(model_dir):
     # Load ImageNet class labels
     try:
         response = requests.get(IMAGENET_LABELS_URL, timeout=10)
+        response.raise_for_status()
         class_labels = response.json()
         logger.info(f"Loaded {len(class_labels)} ImageNet class labels")
     except Exception as e:
-        logger.error(f"Failed to load class labels: {e}")
+        logger.warning(f"Failed to load class labels from URL: {e}")
+        logger.info("Using fallback class labels (indices)")
         # Fallback to indices if labels can't be loaded
         class_labels = [f"class_{i}" for i in range(1000)]
     
@@ -133,13 +135,19 @@ def predict_fn(input_data, model):
     # Download image from presigned URL
     logger.info(f"Downloading image from URL...")
     try:
-        response = requests.get(presigned_url, timeout=30)
+        response = requests.get(presigned_url, timeout=60)
         response.raise_for_status()
         image = Image.open(BytesIO(response.content)).convert("RGB")
         logger.info(f"Image downloaded successfully, size: {image.size}")
-    except Exception as e:
-        logger.error(f"Failed to download or open image: {e}")
+    except requests.exceptions.Timeout:
+        logger.error("Image download timed out after 60 seconds")
+        raise ValueError("Failed to download image: Request timed out. The image URL may be slow or inaccessible.")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Failed to download image: {e}")
         raise ValueError(f"Failed to download image from URL: {str(e)}")
+    except Exception as e:
+        logger.error(f"Failed to open or process image: {e}")
+        raise ValueError(f"Failed to process image: {str(e)}")
     
     # Preprocess image
     image_tensor = transform(image).unsqueeze(0)

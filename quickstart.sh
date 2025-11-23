@@ -58,9 +58,20 @@ echo ""
 echo "========================================================"
 echo "Installing Python dependencies..."
 echo "========================================================"
-pip3 install -q sagemaker boto3
+echo ""
+echo "Recommendation: Consider using a virtual environment:"
+echo "  python3 -m venv venv"
+echo "  source venv/bin/activate"
+echo ""
+read -p "Install globally or skip? (y/n): " install_global
 
-echo "✓ SageMaker SDK and boto3 installed"
+if [ "$install_global" = "y" ]; then
+    pip3 install -q sagemaker boto3
+    echo "✓ SageMaker SDK and boto3 installed"
+else
+    echo "Skipping installation. Install manually with:"
+    echo "  pip3 install sagemaker boto3"
+fi
 
 # Check for IAM role
 echo ""
