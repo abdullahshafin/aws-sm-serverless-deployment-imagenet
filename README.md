@@ -33,6 +33,22 @@ Your IAM role needs the following permissions:
 
 ## Installation
 
+### Option 1: Quick Start Script (Recommended)
+
+Run the automated setup script:
+```bash
+git clone https://github.com/abdullahshafin/aws-sm-serverless-deployment-imagenet.git
+cd aws-sm-serverless-deployment-imagenet
+./quickstart.sh
+```
+
+The script will:
+- Check prerequisites (Python, AWS CLI, credentials)
+- Install required dependencies
+- Guide you through deployment
+
+### Option 2: Manual Installation
+
 1. Clone this repository:
 ```bash
 git clone https://github.com/abdullahshafin/aws-sm-serverless-deployment-imagenet.git
@@ -57,6 +73,10 @@ pip install sagemaker boto3
 ├── deploy.py          # Deployment script for creating serverless endpoint
 ├── test_endpoint.py   # Test script for invoking the endpoint
 ├── requirements.txt   # Python dependencies for inference
+├── quickstart.sh      # Automated setup and deployment script
+├── tutorial.ipynb     # Interactive Jupyter notebook tutorial
+├── EXAMPLES.md        # Input/output format examples and usage patterns
+├── CONTRIBUTING.md    # Contribution guidelines
 └── README.md         # This file
 ```
 
